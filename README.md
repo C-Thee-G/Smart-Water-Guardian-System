@@ -1029,6 +1029,5 @@ temp/
 }
 ```
 
----
 
-This complete README file provides comprehensive documentation for your Smart Water Guardian project, covering everything from installation to deployment. Good luck with your final year project! 🚀
+
