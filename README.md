@@ -61,14 +61,14 @@ South Africa faces a critical water scarcity challenge with virtually no capacit
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     SMART WATER GUARDIAN                    │
+│                     SMART WATER GUARDIAN                    
 ├─────────────────────────────────────────────────────────────┤
-│  📡 IoT Sensors    ☁️ Cloud Analytics    📊 Web Dashboard   │
-│  - ESP32           - Azure IoT Hub      - Consumer Portal  │
-│  - Flow Sensors    - Firebase RTDB      - Municipal Portal │
-│  - MQTT Protocol   - Anomaly Detection  - Admin Panel      │
+│  📡 IoT Sensors    ☁️ Cloud Analytics    📊 Web Dashboard  
+│  - ESP32           - Azure IoT Hub      - Consumer Portal  
+│  - Flow Sensors    - Firebase RTDB      - Municipal Portal 
+│  - MQTT Protocol   - Anomaly Detection  - Admin Panel      
 ├─────────────────────────────────────────────────────────────┤
-│  🔔 Alert System    📈 NRW Reports      💰 Bill Estimation │
+│  🔔 Alert System    📈 NRW Reports      💰 Bill Estimation
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -112,9 +112,9 @@ South Africa faces a critical water scarcity challenge with virtually no capacit
 ┌─────────────────────────────────────────────────────────────┐
 │                    BACKEND TECHNOLOGIES                     │
 ├─────────────────────────────────────────────────────────────┤
-│  PHP 7.4+       │  FastAPI    │  Laravel   │  .NET 8      │
-│  REST API       │  MQTT       │  JWT Auth  │  Firebase    │
-│  MySQL 5.7+     │  Redis      │  Azure     │  Chart.js    │
+│  PHP 7.4+       │  FastAPI    │  Laravel   │  .NET 8        │
+│  REST API       │  MQTT       │  JWT Auth  │  Firebase      │
+│  MySQL 5.7+     │  Redis      │  Azure     │  Chart.js      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -123,8 +123,8 @@ South Africa faces a critical water scarcity challenge with virtually no capacit
 ┌─────────────────────────────────────────────────────────────┐
 │                   FRONTEND TECHNOLOGIES                     │
 ├─────────────────────────────────────────────────────────────┤
-│  HTML5          │  CSS3       │  JavaScript │  Chart.js    │
-│  Bootstrap 5    │  Axios      │  Firebase   │  Responsive  │
+│  HTML5          │  CSS3       │  JavaScript │  Chart.js     │
+│  Bootstrap 5    │  Axios      │  Firebase   │  Responsive   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -133,8 +133,8 @@ South Africa faces a critical water scarcity challenge with virtually no capacit
 ┌─────────────────────────────────────────────────────────────┐
 │                    HARDWARE COMPONENTS                      │
 ├─────────────────────────────────────────────────────────────┤
-│  ESP32 UNO R3   │  YF-S201    │  Breadboard │  Power      │
-│  WiFi           │  Bluetooth  │  Sensors    │  Jumper     │
+│  ESP32 UNO R3   │  YF-S201    │  Breadboard │  Power        │
+│  WiFi           │  Bluetooth  │  Sensors    │  Jumper       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -144,27 +144,27 @@ South Africa faces a critical water scarcity challenge with virtually no capacit
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│                     SYSTEM ARCHITECTURE                        │
+                     SYSTEM ARCHITECTURE                        
 ├────────────────────────────────────────────────────────────────┤
-│                                                                │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐      │
-│  │   ESP32     │───▶│ Azure IoT  │───▶│   MySQL     │      │
-│  │  (Sensor)   │    │    Hub     │    │  Database   │      │
-│  └─────────────┘    └─────────────┘    └─────────────┘      │
-│         │                  │                   │              │
-│         │                  ▼                   ▼              │
-│         │           ┌─────────────┐    ┌─────────────┐      │
-│         │           │  Firebase   │    │   PHP API   │      │
-│         │           │  Realtime   │◀───│   Backend   │      │
-│         │           └─────────────┘    └─────────────┘      │
-│         │                  │                   │              │
-│         │                  ▼                   ▼              │
-│         │           ┌─────────────┐    ┌─────────────┐      │
-│         └──────────▶│   Web/      │    │  Municipal  │      │
-│                      │  Consumer   │    │  Dashboard  │      │
-│                      │  Dashboard  │    │             │      │
-│                      └─────────────┘    └─────────────┘      │
-│                                                                │
+│                                                                
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐         
+│  │   ESP32     │───▶│ Azure IoT  │───▶│   MySQL     │         
+│  │  (Sensor)   │    │    Hub      │    │  Database   │          
+│  └─────────────┘    └─────────────┘    └─────────────┘      
+│         │                  │                   │              
+│         │                  ▼                   ▼             
+│         │           ┌─────────────┐    ┌─────────────┐      
+│         │           │  Firebase   │    │   PHP API   │      
+│         │           │  Realtime   │◀───│   Backend   │      
+│         │           └─────────────┘    └─────────────┘      
+│         │                  │                   │              
+│         │                  ▼                   ▼              
+│         │           ┌─────────────┐    ┌─────────────┐      
+│         └──────────▶│   Web/      │    │  Municipal  │      
+│                      │  Consumer   │    │  Dashboard  │      
+│                      │  Dashboard  │    │             │      
+│                      └─────────────┘    └─────────────┘      
+│                                                                
 └────────────────────────────────────────────────────────────────┘
 ```
 
@@ -193,24 +193,24 @@ South Africa faces a critical water scarcity challenge with virtually no capacit
 ### ESP32 Specifications
 ```
 ┌────────────────────────────────────────────────────┐
-│              ESP32 TECHNICAL SPECIFICATIONS         │
+│              ESP32 TECHNICAL SPECIFICATIONS         
 ├────────────────────────────────────────────────────┤
-│  Microcontroller   : ESP32-D0WDQ6 (Dual-core)     │
-│  Clock Speed      : Up to 240 MHz                  │
-│  SRAM             : 520 KB                         │
-│  Flash Memory     : 4 MB                           │
-│  WiFi             : 802.11 b/g/n (2.4 GHz)        │
-│  Bluetooth        : v4.2 BR/EDR and BLE           │
-│  GPIO Pins        : 34 (multiple functions)       │
-│  Operating Voltage: 3.3V                          │
-│  Input Voltage    : 5V via USB or 7-12V via VIN  │
+│  Microcontroller   : ESP32-D0WDQ6 (Dual-core)     
+│  Clock Speed      : Up to 240 MHz                  
+│  SRAM             : 520 KB                         
+│  Flash Memory     : 4 MB                           
+│  WiFi             : 802.11 b/g/n (2.4 GHz)        
+│  Bluetooth        : v4.2 BR/EDR and BLE           
+│  GPIO Pins        : 34 (multiple functions)       
+│  Operating Voltage: 3.3V                          
+│  Input Voltage    : 5V via USB or 7-12V via VIN  
 └────────────────────────────────────────────────────┘
 ```
 
 ### YF-S201 Flow Sensor Specifications
 ```
 ┌────────────────────────────────────────────────────┐
-│           YF-S201 FLOW SENSOR SPECIFICATIONS        │
+│           YF-S201 FLOW SENSOR SPECIFICATIONS       │
 ├────────────────────────────────────────────────────┤
 │  Model           : YF-S201 (Hall Effect)           │
 │  Pipe Size       : 1/2 inch (DN15)                 │
@@ -231,14 +231,14 @@ South Africa faces a critical water scarcity challenge with virtually no capacit
 ### Development Environment
 ```
 ┌────────────────────────────────────────────────────┐
-│              DEVELOPMENT ENVIRONMENT                │
+│              DEVELOPMENT ENVIRONMENT                
 ├────────────────────────────────────────────────────┤
-│  OS              : Windows 10/11, Linux, macOS    │
-│  Web Server      : Apache 2.4+ (XAMPP)            │
-│  PHP Version     : 7.4 or higher                   │
-│  Database        : MySQL 5.7+                      │
-│  IDE             : VS Code / PHPStorm             │
-│  Git             : Version Control                 │
+│  OS              : Windows 10/11, Linux, macOS    
+│  Web Server      : Apache 2.4+ (XAMPP)            
+│  PHP Version     : 7.4 or higher                   
+│  Database        : MySQL 5.7+                      
+│  IDE             : VS Code / PHPStorm             
+│  Git             : Version Control                 
 └────────────────────────────────────────────────────┘
 ```
 
@@ -588,9 +588,9 @@ Response:
 ### ER Diagram
 ```
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│    users     │────▶│  properties  │────▶│    meters    │
+│    users     │───▶ │  properties  │────▶│    meters   │
 │──────────────│     │──────────────│     │──────────────│
-│ id (PK)     │     │ id (PK)      │     │ id (PK)      │
+│ id (PK)      │     │ id (PK)      │     │ id (PK)      │
 │ name         │     │ user_id (FK) │     │ meter_id (U) │
 │ surname      │     │ address      │     │ property_id  │
 │ email (U)    │     │ property_type│     │ status       │
