@@ -181,4 +181,21 @@ try {
                 'total_supplied' => round($total_supplied, 2),
                 'total_billed' => round($total_billed, 2)
             ],
-            'top_n
+            'top_nrw_areas' => $top_areas,
+            'daily_trend' => $daily_trend,
+            'hourly_usage' => $hourly_usage,
+            'recent_alerts' => $recent_alerts,
+            'alert_statistics' => $alert_stats,
+            'consumption_by_type' => $consumption_by_type
+        ]
+    ]);
+    
+} catch (Exception $e) {
+    error_log("Municipal dashboard error: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error loading municipal dashboard'
+    ]);
+}
+?>
