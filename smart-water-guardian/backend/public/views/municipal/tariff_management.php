@@ -442,4 +442,390 @@ $pageTitle = 'Tariff Management';
         // Find tariff in list
         fetch(`/api/modules/municipal/tariff.php?id=${tariffId}`, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const t = data.tariff;
+                isEditing = true;
+                document.getElementById('tariffModalTitle').textContent = 'Edit Tariff';
+                document.getElementById('tariffSaveText').textContent = 'Update Tariff';
+                document.getElementById('editTariffId').value = t.id;
+                document.getElementById('tariffName').value = t.name;
+                document.getElementById('tariffTier').value = t.tier;
+                document.getElementById('tariffMin').value = t.min_usage;
+                document.getElementById('tariffMax').value = t.max_usage || '';
+                document.getElementById('tariffRate').value = t.rate_per_kl;
+                document.getElementById('tariffEffective').value = t.effective_from;
+                showModal('tariffModal');
+            } else {
+                showToast('Failed to load tariff', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Edit tariff error:', error);
+            showToast('Error loading tariff', 'danger');
+        });
+    }
+
+    // ============================================
+    // SAVE TARIFF
+    // ============================================
+    async function saveTariff(event) {
+        event.preventDefault();
+        
+        const tariffId = document.getElementById('editTariffId').value;
+        const name = document.getElementById('tariffName').value.trim();
+        const tier = parseInt(document.getElementById('tariffTier').value);
+        const minUsage = parseFloat(document.getElementById('tariffMin').value);
+        const maxUsage = document.getElementById('tariffMax').value ? 
+            parseFloat(document.getElementById('tariffMax').value) : null;
+        const rate = parseFloat(document.getElementById('tariffRate').value);
+        const effectiveFrom = document.getElementById('tariffEffective').value;
+        
+        if (!name || !tier || isNaN(minUsage) || isNaN(rate) || !effectiveFrom) {
+            showToast('Please fill in all required fields', 'warning');
+            return;
+        }
+        
+        // Show loading
+        const btn = document.getElementById('tariffSaveBtn');
+        const text = document.getElementById('tariffSaveText');
+        const spinner = document.getElementById('tariffSaveSpinner');
+        btn.disabled = true;
+        text.textContent = isEditing ? 'Updating...' : 'Adding...';
+        spinner.style.display = 'inline';
+        
+        try {
+            const token = localStorage.getItem('token');
+            const endpoint = isEditing ? '/api/modules/municipal/update_tariff.php' : '/api/modules/municipal/create_tariff.php';
+            const payload = {
+                name, tier, min_usage: minUsage, max_usage: maxUsage,
+                rate_per_kl: rate, effective_from: effectiveFrom
+            };
+            if (tariffId) {
+                payload.tariff_id = tariffId;
+            }
+            
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast(isEditing ? 'Tariff updated successfully!' : 'Tariff added successfully!', 'success');
+                closeModal('tariffModal');
+                loadTariffs();
+                loadTariffHistory();
+            } else {
+                showToast(data.message || 'Failed to save tariff', 'danger');
+            }
+        } catch (error) {
+            console.error('Save tariff error:', error);
+            showToast('Error saving tariff', 'danger');
+        } finally {
+            btn.disabled = false;
+            text.textContent = isEditing ? 'Update Tariff' : 'Add Tariff';
+            spinner.style.display = 'none';
+        }
+    }
+
+    // ============================================
+    // TOGGLE TARIFF STATUS
+    // ============================================
+    async function toggleTariffStatus(tariffId) {
+        if (!confirm('Are you sure you want to change this tariff\'s status?')) {
+            return;
+        }
+        
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/modules/municipal/toggle_tariff_status.php', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ tariff_id: tariffId })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast('Tariff status updated', 'success');
+                loadTariffs();
+            } else {
+                showToast(data.message || 'Failed to update status', 'danger');
+            }
+        } catch (error) {
+            console.error('Toggle tariff error:', error);
+            showToast('Error updating tariff status', 'danger');
+        }
+    }
+
+    // ============================================
+    // DELETE TARIFF
+    // ============================================
+    async function deleteTariff(tariffId) {
+        if (!confirm('Are you sure you want to delete this tariff? This action cannot be undone.')) {
+            return;
+        }
+        
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/modules/municipal/delete_tariff.php', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ tariff_id: tariffId })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast('Tariff deleted successfully', 'success');
+                loadTariffs();
+                loadTariffHistory();
+            } else {
+                showToast(data.message || 'Failed to delete tariff', 'danger');
+            }
+        } catch (error) {
+            console.error('Delete tariff error:', error);
+            showToast('Error deleting tariff', 'danger');
+        }
+    }
+
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+    function formatDate(date) {
+        if (!date) return 'Never';
+        return new Date(date).toLocaleString('en-ZA', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+
+    function showToast(message, type) {
+        if (typeof showToast === 'function') {
+            window.showToast(message, type);
+        } else {
+            alert(message);
+        }
+    }
+
+    function showModal(id) {
+        document.getElementById(id).style.display = 'flex';
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    function toggleSidebar() {
+        document.querySelector('.municipal-nav').classList.toggle('collapsed');
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '?page=login';
+    }
+
+    // Close modal on outside click
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    });
+    </script>
+
+    <style>
+    .section-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .section-header h3 {
+        margin: 0;
+        color: #2d3748;
+        font-size: 18px;
+    }
+    .section-header h3 i {
+        color: #667eea;
+        margin-right: 10px;
+    }
+    .btn-sm {
+        padding: 6px 14px;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .btn-sm:hover {
+        transform: translateY(-1px);
+    }
+    .btn-primary.btn-sm {
+        background: #667eea;
+        color: white;
+    }
+    .btn-primary.btn-sm:hover {
+        background: #5a67d8;
+    }
+    .btn-sm.btn-warning { background: #f6ad55; color: white; }
+    .btn-sm.btn-warning:hover { background: #ed8936; }
+    .btn-sm.btn-success { background: #48bb78; color: white; }
+    .btn-sm.btn-success:hover { background: #38a169; }
+    .btn-sm.btn-secondary { background: #e2e8f0; color: #2d3748; }
+    .btn-sm.btn-secondary:hover { background: #cbd5e0; }
+    .btn-sm.btn-danger { background: #fc8181; color: white; }
+    .btn-sm.btn-danger:hover { background: #e53e3e; }
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    .action-badge {
+        padding: 2px 10px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+    .action-badge.create { background: #c6f6d5; color: #22543d; }
+    .action-badge.update { background: #bee3f8; color: #2b6cb0; }
+    .action-badge.delete { background: #fed7d7; color: #742a2a; }
+    .action-badge.toggle { background: #fefcbf; color: #744210; }
+    .chart-container {
+        height: 300px;
+        position: relative;
+    }
+    .table-container {
+        overflow-x: auto;
+    }
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .status-badge.active { background: #c6f6d5; color: #22543d; }
+    .status-badge.inactive { background: #fed7d7; color: #742a2a; }
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #4a5568;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    .form-group .required {
+        color: #e53e3e;
+    }
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        outline: none;
+    }
+    .form-group .help-text {
+        display: block;
+        font-size: 12px;
+        color: #718096;
+        margin-top: 3px;
+    }
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    .form-actions button {
+        padding: 10px 25px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .btn-primary {
+        background: #667eea;
+        color: white;
+    }
+    .btn-primary:hover {
+        background: #5a67d8;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    .btn-secondary {
+        background: #f7fafc;
+        color: #2d3748;
+    }
+    .btn-secondary:hover {
+        background: #e2e8f0;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 30px;
+        color: #718096;
+    }
+    .empty-state i {
+        font-size: 32px;
+        color: #a0aec0;
+        margin-bottom: 10px;
+    }
+    .text-center { text-align: center; }
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        .section-header {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .action-buttons {
+            flex-wrap: wrap;
+        }
+    }
+    </style>
+</body>
+</html>
